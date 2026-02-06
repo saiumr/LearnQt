@@ -2,6 +2,7 @@
 #include "./ui_logindialog.h"
 #include <QMessageBox>
 #include <QRegularExpression>
+#include <QFile>
 
 LoginDialog::LoginDialog(QWidget *parent)
     : QDialog(parent)
@@ -39,8 +40,61 @@ void LoginDialog::on_button_login_clicked()
 
     if (!match.hasMatch()) {
         QMessageBox::information(this, "提示", "非法的邮箱地址，请你重新输入！");
+        // 自动清理输入框（lineEdit），实际上不一定需要，用户可能只是输入错误了几个字符
+        ui->lineEdit_account->clear();
+        ui->lineEdit_passwd->clear();
+        // 自动聚焦到输入框
+        ui->lineEdit_account->setFocus();
+        return;
     } else {
-        QMessageBox::information(this, "提示", "欢迎登录科目一考试系统！");
+        // QMessageBox::information(this, "提示", "欢迎登录科目一考试系统！");
+        QString filename;
+        QString strAccount;     // 用户输入的账号
+        QString strPasswd;      // 用户输入的密码
+        QString strLine;        // 行读取
+        QStringList strList;    // 字符串列表保存从文件读取到的账号和密码
+
+        filename = "../../account.txt";
+        strAccount = ui->lineEdit_account->text();
+        strPasswd = ui->lineEdit_passwd->text();
+
+        QFile file { filename };
+        QTextStream stream { &file };
+
+        // 只读打开纯文本
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            while (!stream.atEnd()) {
+                strLine = stream.readLine();
+                strList = strLine.split(',');
+                if (strAccount == strList.at(0)) {
+                    if (strPasswd == strList.at(1)) {
+                        QMessageBox::information(this, "提示", "欢迎登录科目一考试系统！");
+                        file.close();
+                        // todo: 此处登录成功，跳转到主界面
+                        return;
+                    } else {
+                        QMessageBox::information(this, "提示", "密码错误，请重新输入！");
+                        ui->lineEdit_passwd->clear();
+                        ui->lineEdit_passwd->setFocus();
+                        file.close();
+                        return;
+                    }
+                }
+            }
+
+            // 遍历完了所有账号没找到
+            // 提示完恢复数据状态
+            QMessageBox::information(this, "提示", "账号错误，请重新输入！");
+            ui->lineEdit_account->clear();
+            ui->lineEdit_passwd->clear();
+            ui->lineEdit_account->setFocus();
+            file.close();
+            return;
+
+        } else {
+            QMessageBox::information(this, "提示", "读取账号数据文件失败！");
+            return;
+        }
     }
 
 }

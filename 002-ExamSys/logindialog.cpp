@@ -13,6 +13,8 @@ LoginDialog::LoginDialog(QWidget *parent)
     ui->label_bg->setScaledContents(true);
     // 窗口设置成背景图label大小
     this->resize(ui->label_bg->width(), ui->label_bg->height());
+    // 设置固定的窗口大小
+    setFixedSize(width(), height());
     // 设置窗体风格
     this->setWindowTitle("驾校科目一考试登录");
     // For Dialog windows, the Close button is enabled by default.

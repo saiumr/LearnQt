@@ -33,7 +33,8 @@ void LoginDialog::on_button_login_clicked()
     // 元字符解释：^表示规则字符串的开始  $表示规则字符串的结束
     // +表示匹配次数>=1次  *表示可以匹配任意次数(可以是0次)  {n,m}匹配此时[n,m]
     // 用^...$锚定整个字符串会进行精确匹配
-    QRegularExpression rx { "^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9-]+\.)+[A-Za-z]{2,6}$" };
+    // 使用原生字符 R"()"，c++编译器不会转义'\'，从而被正则表达式使用
+    QRegularExpression rx { R"(^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9-]+\.)+[A-Za-z]{2,6}$)" };
     QRegularExpressionMatch match { rx.match(ui->lineEdit_account->text()) };
 
     if (!match.hasMatch()) {

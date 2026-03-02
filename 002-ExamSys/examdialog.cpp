@@ -12,7 +12,11 @@ ExamDialog::ExamDialog() {
     font.setPointSize(12);
     setFont(font);
     // 设置窗口背景颜色
-    setPalette(QPalette { QColor { 209, 215, 255 } });
+    // setPalette(QPalette { QColor { 209, 215, 255 } });
+    // setPalette创建了一个只有一个颜色的“残缺调色板”，
+    // 把系统样式绘制 QCheckBox √ 画成了和背景几乎一样的颜色导致看不到
+    // 使用下面的设置仅改变窗口颜色
+    this->setStyleSheet("QDialog { background-color: rgb(31,31,31); }");
 
     setWindowTitle("考试已用时：0分0秒");  // 开始时标题设置
     setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);  // 窗口只需要一个对话框和一个x关闭按钮，虽然Qt6不设置也对
@@ -31,6 +35,7 @@ ExamDialog::ExamDialog() {
         // Qt6新语法直接传函数指针
         QTimer::singleShot(0, qApp, &QApplication::quit);
     }
+    initButtons();
 }
 
 void ExamDialog::initTimer()
@@ -100,6 +105,79 @@ bool ExamDialog::initTextEdit()
     } else {
         return false;
     }
+}
+
+void ExamDialog::initButtons()
+{
+    QStringList strList { "A", "B", "C", "D" };
+    int judgeIndex = 0;
+    int singleCount = 0;
+    int multiCount = 0;
+    int btnGroupsCount = 0;
+    bool add_single { false };
+    // 总共10个题目  4判断，3多选，3单选
+    for (int i = 0; i < 10; i++) {
+        // 题目标签
+        m_titleLabels[i] = std::make_unique<QLabel>(this);
+        m_titleLabels[i]->setText("第" + QString::number(i+1) + "题");
+        m_layout->addWidget(m_titleLabels[i].get(), 1, i);
+
+        // 判断题
+        switch (i) {
+        case 0:
+        case 3:
+        case 6:
+        case 9:
+            m_radioA[judgeIndex] = std::make_unique<QRadioButton>(this);
+            m_radioB[judgeIndex] = std::make_unique<QRadioButton>(this);
+            m_radioA[judgeIndex]->setText("A.正确");
+            m_radioB[judgeIndex]->setText("B.错误");
+            m_layout->addWidget(m_radioA[judgeIndex].get(), 2, i);
+            m_layout->addWidget(m_radioB[judgeIndex].get(), 3, i);
+
+            m_btnGroups[btnGroupsCount] = std::make_unique<QButtonGroup>(this);
+            m_btnGroups[btnGroupsCount]->addButton(m_radioA[judgeIndex].get());
+            m_btnGroups[btnGroupsCount]->addButton(m_radioB[judgeIndex].get());
+            judgeIndex++;
+            btnGroupsCount++;
+
+            continue;
+            break;
+        default:
+            break;
+        }
+
+        // 选择题
+        if (i == 2 || i == 5 || i == 8) {
+            // 多选题
+            for (int j = 0; j < 4; j++) {
+                int index = 4 * multiCount + j;
+                m_checkBtns[index] = std::make_unique<QCheckBox>(this);
+                m_checkBtns[index]->setText(strList.at(j));
+                m_layout->addWidget(m_checkBtns[index].get(), j+2, i);
+            }
+            multiCount++;
+        } else {
+            // 按钮分组
+            m_btnGroups[btnGroupsCount] = std::make_unique<QButtonGroup>(this);
+            // 单选题
+            for (int j = 0; j < 4; j++) {
+                int index = 4 * singleCount + j;
+                m_radioBtns[index] = std::make_unique<QRadioButton>(this);
+                m_radioBtns[index]->setText(strList[j]);
+                m_layout->addWidget(m_radioBtns[index].get(), j+2, i);
+                m_btnGroups[btnGroupsCount]->addButton(m_radioBtns[index].get());
+            }
+            singleCount++;
+            btnGroupsCount++;
+        }
+    }
+
+    // 提交解答的按钮
+    m_submitBtn = std::make_unique<QPushButton>(this);
+    m_submitBtn->setText("提交");
+    m_submitBtn->setFixedSize(100, 35);
+    m_layout->addWidget(m_submitBtn.get(), 6, 9);
 }
 
 void ExamDialog::freshTime()

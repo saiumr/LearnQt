@@ -80,11 +80,11 @@ bool ExamDialog::initTextEdit()
 
             // 过滤掉答案行
             // 答案行是"答案："开头的，后面跟着一个或者多个大写字母，严格匹配
-            QRegularExpression answer_regex { R"(^答案：[A-Z]+$)" };
+            QRegularExpression answer_regex { R"(^答案：([A-Z]+|正确|错误)$)" };
             QRegularExpressionMatch match { answer_regex.match(strLine) };
             if (match.hasMatch()) {
                 strList = strLine.split("：");
-                answerList.append(strList.at(1));
+                m_answerList.append(strList.at(1));
                 strText += '\n';  // 添加空行
                 nLines++;
                 continue;
@@ -130,8 +130,8 @@ void ExamDialog::initButtons()
         case 9:
             m_radioA[judgeIndex] = std::make_unique<QRadioButton>(this);
             m_radioB[judgeIndex] = std::make_unique<QRadioButton>(this);
-            m_radioA[judgeIndex]->setText("A.正确");
-            m_radioB[judgeIndex]->setText("B.错误");
+            m_radioA[judgeIndex]->setText("正确");
+            m_radioB[judgeIndex]->setText("错误");
             m_layout->addWidget(m_radioA[judgeIndex].get(), 2, i);
             m_layout->addWidget(m_radioB[judgeIndex].get(), 3, i);
 
@@ -177,7 +177,35 @@ void ExamDialog::initButtons()
     m_submitBtn = std::make_unique<QPushButton>(this);
     m_submitBtn->setText("提交");
     m_submitBtn->setFixedSize(100, 35);
+    // 信号槽  点击提交按钮之后获得分数
+    QObject::connect(m_submitBtn.get(), &QPushButton::clicked, this, &ExamDialog::getScore);
     m_layout->addWidget(m_submitBtn.get(), 6, 9);
+}
+
+bool ExamDialog::hasNoSelect()
+{
+    // 4 判断 3 单选 3 多选
+    // 通过 button group 的 checkedButton() 检查
+    // 通过 check box 的 isChecked() 检查
+    int radioSelects { 0 };
+    int checkSelects { 0 };
+    for (int i = 0; i < 7; i++) {
+        if (m_btnGroups[i]->checkedButton()) radioSelects++;
+    }
+
+    if (radioSelects != 7) return true;
+
+    // 多选题 3 个题目 每个4个选项
+    // 检查是否都多选了
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (m_checkBtns[i * 4 + j]->isChecked()) checkSelects++;
+        }
+        if (checkSelects == 0 || checkSelects == 1) return true;
+        checkSelects = 0;
+    }
+
+    return false;
 }
 
 void ExamDialog::freshTime()
@@ -186,4 +214,71 @@ void ExamDialog::freshTime()
     QString sec { QString::number(m_timeGo % 60) }; // 秒
     QString min { QString::number(m_timeGo / 60) }; // 分
     setWindowTitle("考试已用时：" + min + "分" + sec + "秒");
+}
+
+void ExamDialog::getScore()
+{
+    qDebug() << "======== m_answerList ===========";
+    qDebug() << "列表总长度：" << m_answerList.size();
+    for (int i = 0; i < m_answerList.size(); ++i) {
+        qDebug() << "索引" << i << "的值：" << m_answerList.at(i);
+    }
+    qDebug() << "==================================\n";
+
+    if (m_answerList.size() < 10) {
+        QMessageBox::warning(this, "错误", "答案列表初始化不完整！");
+        return;
+    }
+
+    if (hasNoSelect()) {
+        QMessageBox::information(this, "提示", "您有未完成的题目，请完成后再提交！");
+        return;
+    }
+
+    int scores { 0 };
+    int multiCount { 0 };
+    int judgeAndSingleCount { 0 };
+    for (int i = 0; i < 10; ++i) {
+        // 4 判断 3 单选 3 多选
+        // 判断题：1 4 7 10
+        // 单选题：2 5 8
+        // 多选题：3 6 9
+        if (i == 2 || i == 5 || i == 8) {
+            QString answer { m_answerList.at(i) };
+            bool hasA { false };
+            bool hasB { false };
+            bool hasC { false };
+            bool hasD { false };
+
+            if (answer.contains("A")) hasA = true;
+            if (answer.contains("B")) hasB = true;
+            if (answer.contains("C")) hasC = true;
+            if (answer.contains("D")) hasD = true;
+
+            bool checkA { m_checkBtns[multiCount * 4]->isChecked() };
+            bool checkB { m_checkBtns[multiCount * 4 + 1]->isChecked() };
+            bool checkC { m_checkBtns[multiCount * 4 + 2]->isChecked() };
+            bool checkD { m_checkBtns[multiCount * 4 + 3]->isChecked() };
+
+            if (hasA == checkA && hasB == checkB &&
+                hasC == checkC && hasD == checkD)
+                scores += 10;
+
+            multiCount++;
+        } else {
+            if (m_btnGroups[judgeAndSingleCount]->checkedButton()->text() == m_answerList.at(i))
+                scores += 10;
+            judgeAndSingleCount++;
+        }
+    }
+
+    qDebug() << "here";
+
+    QString str { "提交成功！您的得分是：" + QString::number(scores) + "分，是否重新考试？" };
+    int res { QMessageBox::information(this, "提示", str, QMessageBox::Yes | QMessageBox::No) };
+    if (res == QMessageBox::Yes) {
+        return;
+    } else {
+        this->close();
+    }
 }

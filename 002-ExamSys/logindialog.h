@@ -20,6 +20,8 @@ public:
 private slots:
     void on_button_login_clicked();
 
+    void on_button_cancel_clicked();
+
 private:
     Ui::LoginDialog *ui;
 };

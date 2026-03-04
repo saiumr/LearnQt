@@ -36,6 +36,9 @@ ExamDialog::ExamDialog() {
         QTimer::singleShot(0, qApp, &QApplication::quit);
     }
     initButtons();
+
+    // 初始化完成后显示考试界面
+    this->show();
 }
 
 void ExamDialog::initTimer()
@@ -271,8 +274,6 @@ void ExamDialog::getScore()
             judgeAndSingleCount++;
         }
     }
-
-    qDebug() << "here";
 
     QString str { "提交成功！您的得分是：" + QString::number(scores) + "分，是否重新考试？" };
     int res { QMessageBox::information(this, "提示", str, QMessageBox::Yes | QMessageBox::No) };

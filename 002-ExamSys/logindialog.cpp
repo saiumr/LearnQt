@@ -72,7 +72,9 @@ void LoginDialog::on_button_login_clicked()
                     if (strPasswd == strList.at(1)) {
                         QMessageBox::information(this, "提示", "欢迎登录科目一考试系统！");
                         file.close();
-                        // todo: 此处登录成功，跳转到主界面
+                        // 此处登录成功，跳转到主界面
+                        // 关闭当前窗口，并以指定方式返回 （登录是Accepted，取消是Rejected）
+                        this->done(Accepted);
                         return;
                     } else {
                         QMessageBox::information(this, "提示", "密码错误，请重新输入！");
@@ -99,5 +101,11 @@ void LoginDialog::on_button_login_clicked()
         }
     }
 
+}
+
+
+void LoginDialog::on_button_cancel_clicked()
+{
+    this->done(Rejected);
 }
 

@@ -56,7 +56,7 @@ void LoginDialog::on_button_login_clicked()
         QString strLine;        // 行读取
         QStringList strList;    // 字符串列表保存从文件读取到的账号和密码
 
-        filename = "../../account.txt";
+        filename = "./account.txt";
         strAccount = ui->lineEdit_account->text();
         strPasswd = ui->lineEdit_passwd->text();
 

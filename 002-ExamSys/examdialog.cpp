@@ -67,7 +67,7 @@ bool ExamDialog::initTextEdit()
     // 读取整个题库放到文本编辑器中
     QString     strLine;
     QStringList strList;
-    QString     filename { "../../exam.txt" };
+    QString     filename { "./exam.txt" };
     QFile       file { filename };
     QTextStream stream { &file };
 

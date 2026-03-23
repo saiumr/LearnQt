@@ -12,6 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+set(app_icon_resource_windows  ""${CMAKE_CURRENT_SOURCE_DIR}/app_icon.rc"")
+
 set(PROJECT_SOURCES
         main.cpp
         logindialog.cpp
@@ -25,7 +27,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         image.qrc
         examdialog.h examdialog.cpp
+        ${app_icon_resource_windows}
     )
+
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET 002-ExamSys APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
@@ -70,3 +74,17 @@ install(TARGETS 002-ExamSys
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(002-ExamSys)
 endif()
+
+
+file(GLOB TXT_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.txt"
+)
+
+foreach(txt_file ${TXT_FILES})
+    add_custom_command(TARGET 002-ExamSys POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${txt_file}
+        $<TARGET_FILE_DIR:002-ExamSys>
+    )
+endforeach()
+

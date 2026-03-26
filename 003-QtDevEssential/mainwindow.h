@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "colorcircle.h"
+#include <QSlider>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,5 +24,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QSlider        *m_slider;
+    ColorCircle    *m_circle;
+    QPushButton    *m_btnShowColor;
+    QLabel         *m_lblColorInfo;
 };
 #endif // MAINWINDOW_H

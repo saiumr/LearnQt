@@ -57,6 +57,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle("Qt Dev Essential");
     resize(600, 400);
+
+    // 修改窗体风格：无边框、半透明
+    // setWindowFlags(Qt::FramelessWindowHint);
+    // setWindowOpacity(0.5);
+
+    // 设置全局样式表
+    setStyleSheet("QWidget { background-color: #1f1f1f; }"
+                  "QPushButton { background-color: #2ecc71; color: white; border-radius: 5px; padding: 6px; }"
+                  "QPushButton:hover { background-color: #27ae60; }"
+                  "QLabel { color: #ff8080; font: 10pt; }");
 }
 
 MainWindow::~MainWindow()

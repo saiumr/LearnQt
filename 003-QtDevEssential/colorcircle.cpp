@@ -15,6 +15,11 @@ void ColorCircle::setColor(const QColor &newColor)
     emit colorChanged(newColor);    // 发射信号
 }
 
+ColorCircle::~ColorCircle()
+{
+    qDebug() << "ColorCircle 被销毁了";
+}
+
 void ColorCircle::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);

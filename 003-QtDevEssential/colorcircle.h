@@ -17,6 +17,8 @@ public:
     QColor color() const { return m_color; }
     void   setColor(const QColor& newColor);
 
+    ~ColorCircle();
+
 signals:
     void colorChanged(const QColor &newColor);  // 属性变化通知
 

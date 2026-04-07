@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
         m_circle->setProperty("color", color);
     });
 
-    // [这个实际上没用到]：当圆形的颜色改变时，更新滑块的位置（实现双向同步）
+    // 当圆形的颜色改变时，更新滑块的位置（实现双向同步）
     connect(m_circle, &ColorCircle::colorChanged, this, [this](const QColor &color) {
         int hue { color.hue() };
         if (hue == -1) hue = 0;        // 无色调（如黑色）时归零
@@ -76,9 +76,30 @@ MainWindow::MainWindow(QWidget *parent)
                   "QPushButton { background-color: #2ecc71; color: white; border-radius: 5px; padding: 6px; }"
                   "QPushButton:hover { background-color: #27ae60; }"
                   "QLabel { color: #ff8080; font: 10pt; }");
+
+    // 添加唤起颜色输入框的按钮
+    QPushButton *btnColorDialog = new QPushButton("自定义颜色", this);
+    layout->addWidget(btnColorDialog);
+    connect(btnColorDialog, &QPushButton::clicked, this, &MainWindow::onColorInput);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::onColorInput()
+{
+    ColorInputDialog dlg(this);
+    if (dlg.exec() == QDialog::Accepted) {
+        // 到此处已经调用了 accept
+        QColor color = dlg.getColor();
+        if (color.isValid()) {
+            m_circle->setColor(color);  // 设置颜色，发射信号，同步滑块位置
+        } else {
+            QMessageBox::warning(this, "无效颜色", "输入颜色无效，请重新输入");
+        }
+    } else {
+        // 到此处已经调用了 reject
+    }
 }

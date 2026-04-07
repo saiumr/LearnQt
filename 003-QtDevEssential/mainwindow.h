@@ -3,10 +3,12 @@
 
 #include <QMainWindow>
 #include "colorcircle.h"
+#include "colorinputdialog.h"
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,6 +23,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+private slots:
+    void onColorInput();
 
 private:
     Ui::MainWindow *ui;

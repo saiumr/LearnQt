@@ -12,6 +12,7 @@ qt_add_executable(003-QtDevEssential
     mainwindow.h
     mainwindow.ui
     colorcircle.h colorcircle.cpp
+    colorinputdialog.h colorinputdialog.cpp
 )
 
 target_link_libraries(003-QtDevEssential

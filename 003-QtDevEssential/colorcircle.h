@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QColor>
 #include <QPaintEvent>
+#include <QSize>
 
 class ColorCircle : public QWidget
 {
@@ -18,6 +19,8 @@ public:
     void   setColor(const QColor& newColor);
 
     ~ColorCircle();
+
+     QSize sizeHint() const override;
 
 signals:
     void colorChanged(const QColor &newColor);  // 属性变化通知

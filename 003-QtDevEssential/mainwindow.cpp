@@ -21,11 +21,19 @@ MainWindow::MainWindow(QWidget *parent)
     m_btnShowColor = new QPushButton("读取圆形颜色", this);
     m_lblColorInfo = new QLabel("当前颜色：未读取", this);
 
+    // 让圆形区域占据大部分空间，滑块和按钮固定高度
+    m_circle->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);  // 圆形可扩展
+    m_slider->setFixedHeight(30);        // 滑块固定高度
+    m_btnShowColor->setFixedSize(100, 30);
+    m_lblColorInfo->setFixedHeight(25);
+
     // 把组件通通添加到布局中
-    layout->addWidget(m_circle, 0, Qt::AlignCenter);
-    layout->addWidget(m_slider);
-    layout->addWidget(m_btnShowColor);
-    layout->addWidget(m_lblColorInfo);
+    // layout->addWidget(m_circle, 1, Qt::AlignCenter);  // 有Alignment也不会自动拉伸了
+    layout->addWidget(m_circle, 1);         // 占据1份空间（其他的为0，就是说缩放窗口时多余空间全都分配给圆形）
+    layout->addWidget(m_slider, 0);         // 0 表示不拉伸，按固定高度
+    layout->addWidget(m_btnShowColor, 0);
+    layout->addWidget(m_lblColorInfo, 0);
+    layout->addStretch();  // 底部添加弹性空间，让上面控件靠上紧密排列
 
     // 信号槽连接：滑块值变化 -> 改变图形的颜色
     connect(m_slider, &QSlider::valueChanged, this, [this](int hue) {
@@ -56,7 +64,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     setWindowTitle("Qt Dev Essential");
-    resize(600, 400);
+    resize(600, 700);               // 初始大小
+    setMinimumSize(300, 300);       // 最小限制
 
     // 修改窗体风格：无边框、半透明
     // setWindowFlags(Qt::FramelessWindowHint);

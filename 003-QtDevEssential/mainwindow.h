@@ -2,13 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "colorcircle.h"
-#include "colorinputdialog.h"
-#include <QSlider>
-#include <QVBoxLayout>
 #include <QPushButton>
-#include <QLabel>
-#include <QMessageBox>
+#include <QBoxLayout>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,13 +20,14 @@ public:
     ~MainWindow();
 
 private slots:
-    void onColorInput();
+    void openDynamicProperDemo();
+    void openLabelDemo();
 
 private:
-    Ui::MainWindow *ui;
-    QSlider        *m_slider;
-    ColorCircle    *m_circle;
-    QPushButton    *m_btnShowColor;
-    QLabel         *m_lblColorInfo;
+    Ui::MainWindow    *ui;
+    QPushButton       *m_btnDynamic;
+    QPushButton       *m_btnLabel;
+
+    void addStyleButton(QBoxLayout *layout, QPushButton *btn, const QString &text, int fixed_width = 72);
 };
 #endif // MAINWINDOW_H

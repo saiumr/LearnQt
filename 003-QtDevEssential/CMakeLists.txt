@@ -3,6 +3,8 @@ project(003-QtDevEssential LANGUAGES CXX)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
+set(app_icon_resource_windows  ""${CMAKE_CURRENT_SOURCE_DIR}/app_icon.rc"")
+
 qt_standard_project_setup()
 
 qt_add_executable(003-QtDevEssential
@@ -13,6 +15,8 @@ qt_add_executable(003-QtDevEssential
     mainwindow.ui
     colorcircle.h colorcircle.cpp
     colorinputdialog.h colorinputdialog.cpp
+    dynamicpropertydialog.h dynamicpropertydialog.cpp
+    ${app_icon_resource_windows}
 )
 
 target_link_libraries(003-QtDevEssential

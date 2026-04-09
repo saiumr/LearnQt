@@ -1,5 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "dynamicpropertydialog.h"
+#include <QVBoxLayout>
+#include <QMargins>
+#include <QFontMetrics>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -7,80 +11,33 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // 创建中央控件和布局
-    QWidget *central { new QWidget {this} };
+    // 设置控件容器避免控件重叠
+    QWidget* central = new QWidget(this);
     setCentralWidget(central);
-    QVBoxLayout *layout { new QVBoxLayout {central} };
+    QVBoxLayout *layout = new QVBoxLayout(central);
 
-    // 创建图形控件和滑块
-    m_circle = new ColorCircle { this };
-    m_slider = new QSlider { Qt::Horizontal, this };
-    m_slider->setRange(0, 360);    // 色相范围0-360
+    // new 按钮
+    m_btnDynamic = new QPushButton(central);
+    m_btnLabel = new QPushButton(central);
 
-    // 创建按钮和标签
-    m_btnShowColor = new QPushButton("读取圆形颜色", this);
-    m_lblColorInfo = new QLabel("当前颜色：未读取", this);
+    // 添加按钮到布局
+    addStyleButton(layout, m_btnDynamic, "动态属性和对话框");
+    addStyleButton(layout, m_btnLabel, "Label演示");
 
-    // 让圆形区域占据大部分空间，滑块和按钮固定高度
-    m_circle->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);  // 圆形可扩展
-    m_slider->setFixedHeight(30);        // 滑块固定高度
-    m_btnShowColor->setFixedSize(100, 30);
-    m_lblColorInfo->setFixedHeight(25);
+    // 设置一点内外边距
+    layout->setContentsMargins(10, 10, 10, 10);
+    layout->setSpacing(2);
+    // 加个垂直弹簧，把按钮顶到一起
+    layout->addStretch();
 
-    // 把组件通通添加到布局中
-    // layout->addWidget(m_circle, 1, Qt::AlignCenter);  // 有Alignment也不会自动拉伸了
-    layout->addWidget(m_circle, 1);         // 占据1份空间（其他的为0，就是说缩放窗口时多余空间全都分配给圆形）
-    layout->addWidget(m_slider, 0);         // 0 表示不拉伸，按固定高度
-    layout->addWidget(m_btnShowColor, 0);
-    layout->addWidget(m_lblColorInfo, 0);
-    layout->addStretch();  // 底部添加弹性空间，让上面控件靠上紧密排列
+    // 连接信号槽
+    connect(m_btnDynamic, &QPushButton::clicked, this, &MainWindow::openDynamicProperDemo);
+    connect(m_btnLabel, &QPushButton::clicked, this, &MainWindow::openLabelDemo);
 
-    // 信号槽连接：滑块值变化 -> 改变图形的颜色
-    connect(m_slider, &QSlider::valueChanged, this, [this](int hue) {
-        QColor color;
-        color.setHsv(hue, 255, 255);  // 饱和度、亮度固定
-        // 传统方式设置 m_color
-        // m_circle->setColor(color);
-        // 动态属性方式：通过属性名设置
-        m_circle->setProperty("color", color);
-    });
-
-    // 当圆形的颜色改变时，更新滑块的位置（实现双向同步）
-    connect(m_circle, &ColorCircle::colorChanged, this, [this](const QColor &color) {
-        int hue { color.hue() };
-        if (hue == -1) hue = 0;        // 无色调（如黑色）时归零
-        m_slider->blockSignals(true);  // 防止循环触发
-        m_slider->setValue(hue);
-        m_slider->blockSignals(false);
-    });
-
-    // 点击按钮时，读取圆形颜色并显示
-    connect(m_btnShowColor, &QPushButton::clicked, this, [this]() {
-        // 动态属性读
-        QColor color = m_circle->property("color").value<QColor>();
-        QString str = QString("当前颜色：RGB(%1, %2, %3)")
-                          .arg(color.red()).arg(color.green()).arg(color.blue());
-        m_lblColorInfo->setText(str);
-    });
-
+    // 设定窗口属性
     setWindowTitle("Qt Dev Essential");
-    resize(600, 700);               // 初始大小
-    setMinimumSize(300, 300);       // 最小限制
-
-    // 修改窗体风格：无边框、半透明
-    // setWindowFlags(Qt::FramelessWindowHint);
-    // setWindowOpacity(0.5);
-
-    // 设置全局样式表
-    setStyleSheet("QWidget { background-color: #1f1f1f; }"
-                  "QPushButton { background-color: #2ecc71; color: white; border-radius: 5px; padding: 6px; }"
-                  "QPushButton:hover { background-color: #27ae60; }"
-                  "QLabel { color: #ff8080; font: 10pt; }");
-
-    // 添加唤起颜色输入框的按钮
-    QPushButton *btnColorDialog = new QPushButton("自定义颜色", this);
-    layout->addWidget(btnColorDialog);
-    connect(btnColorDialog, &QPushButton::clicked, this, &MainWindow::onColorInput);
+    resize(600, 450);
+    setMinimumSize(400, 300);
 }
 
 MainWindow::~MainWindow()
@@ -88,18 +45,41 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::onColorInput()
+void MainWindow::openDynamicProperDemo()
 {
-    ColorInputDialog dlg(this);
-    if (dlg.exec() == QDialog::Accepted) {
-        // 到此处已经调用了 accept
-        QColor color = dlg.getColor();
-        if (color.isValid()) {
-            m_circle->setColor(color);  // 设置颜色，发射信号，同步滑块位置
-        } else {
-            QMessageBox::warning(this, "无效颜色", "输入颜色无效，请重新输入");
-        }
-    } else {
-        // 到此处已经调用了 reject
-    }
+    DynamicPropertyDialog *dlg = new DynamicPropertyDialog(this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    dlg->show();
 }
+
+void MainWindow::openLabelDemo()
+{
+    qDebug() << "打开QLabel功能演示";
+}
+
+void MainWindow::addStyleButton(QBoxLayout *layout, QPushButton *btn, const QString &text, int fixed_width)
+{
+    // 设置样式，文本默认是居中显示，改为左对齐，距上下边界1px，左右边界5px
+    btn->setStyleSheet(R"(
+        QPushButton {
+            text-align: left;
+            padding: 1px 5px;
+        }
+    )");
+
+    // 溢出文字改为...显示
+    QFontMetrics fm(btn->font());
+    int textWidth = fixed_width - 10;  // 上面样式设置了左右5px的间距，这里减掉10可用宽度
+    QString showText = fm.elidedText(text, Qt::ElideRight, textWidth);  // 自动生成带省略号的文本
+    btn->setText(showText);
+
+    // 鼠标悬停显示原文本
+    btn->setToolTip(text);
+
+    // 设置按钮固定宽度
+    btn->setFixedWidth(fixed_width);
+
+    // 按钮左对齐添加到布局中
+    layout->addWidget(btn, 0, Qt::AlignLeft);
+}
+

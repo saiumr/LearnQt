@@ -22,7 +22,7 @@ LabelDemo::LabelDemo(QWidget *parent) : QWidget(parent) {
 
     // 图片显示
     QLabel *imageLabel = new QLabel(this);
-    QPixmap pixmap(":/images/logo.png");
+    QPixmap pixmap(":/lee_ico.ico");
     if (!pixmap.isNull()) {
         imageLabel->setPixmap(pixmap);
         imageLabel->setScaledContents(true);

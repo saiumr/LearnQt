@@ -7,6 +7,8 @@ set(app_icon_resource_windows  ""${CMAKE_CURRENT_SOURCE_DIR}/app_icon.rc"")
 
 qt_standard_project_setup()
 
+qt_add_resources(RESOURCES assets.qrc)
+
 qt_add_executable(003-QtDevEssential
     WIN32 MACOSX_BUNDLE
     main.cpp
@@ -18,6 +20,7 @@ qt_add_executable(003-QtDevEssential
     dynamicpropertydemo.h dynamicpropertydemo.cpp
     ${app_icon_resource_windows}
     labeldemo.h labeldemo.cpp
+    ${RESOURCES}
 )
 
 target_link_libraries(003-QtDevEssential

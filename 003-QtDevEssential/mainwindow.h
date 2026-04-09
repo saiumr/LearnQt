@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QBoxLayout>
 #include <QList>
+#include <QWidget>
+#include <QPointer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,12 +26,17 @@ private slots:
     void openDynamicProperDemo();
     void openLabelDemo();
 
+signals:
+    void sigCloseAllDemos();  // 广播关闭信号
+
 private:
     Ui::MainWindow    *ui;
     QPushButton       *m_btnDynamic;
     QPushButton       *m_btnLabel;
 
-    QList<QWidget*>   m_demos;
+    QList<QPointer<QWidget>> m_demos;
+    void closeEvent(QCloseEvent *event) override;
     void addStyleButton(QBoxLayout *layout, QPushButton *btn, const QString &text, int fixed_width = 72);
+    void setButtonBh(QWidget *demo);
 };
 #endif // MAINWINDOW_H

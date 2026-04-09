@@ -11,6 +11,7 @@ class DynamicPropertyDemo : public QWidget
     Q_OBJECT
 public:
     explicit DynamicPropertyDemo(QWidget* parent = nullptr);
+    ~DynamicPropertyDemo();
 
 private slots:
     void onColorInput();

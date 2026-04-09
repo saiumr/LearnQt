@@ -82,6 +82,11 @@ DynamicPropertyDemo::DynamicPropertyDemo(QWidget* parent) : QWidget(parent) {
 
 }
 
+DynamicPropertyDemo::~DynamicPropertyDemo()
+{
+    qDebug() << "动态属性和对话框窗口释放了";
+}
+
 void DynamicPropertyDemo::onColorInput()
 {
     ColorInputDialog dlg(this);

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dynamicpropertydemo.h"
+#include "labeldemo.h"
 #include <QVBoxLayout>
 #include <QMargins>
 #include <QFontMetrics>
@@ -42,23 +43,31 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    for (auto &demo_window : m_demos) {
-        demo_window->close();
-    }
+    qDebug() << "主窗口释放了";
     delete ui;
 }
 
 void MainWindow::openDynamicProperDemo()
 {
     DynamicPropertyDemo *demo = new DynamicPropertyDemo();
-    demo->setAttribute(Qt::WA_DeleteOnClose);
-    m_demos.append(demo);
+    setButtonBh(demo);
     demo->show();
 }
 
 void MainWindow::openLabelDemo()
 {
-    qDebug() << "打开QLabel功能演示";
+    LabelDemo *demo = new LabelDemo();
+    setButtonBh(demo);
+    demo->show();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    // 广播关闭信号，安全关闭所有 Demo
+    emit sigCloseAllDemos();
+
+    // 调用父类默认处理，最后才销毁主窗口
+    QMainWindow::closeEvent(event);
 }
 
 void MainWindow::addStyleButton(QBoxLayout *layout, QPushButton *btn, const QString &text, int fixed_width)
@@ -85,5 +94,12 @@ void MainWindow::addStyleButton(QBoxLayout *layout, QPushButton *btn, const QStr
 
     // 按钮左对齐添加到布局中
     layout->addWidget(btn, 0, Qt::AlignLeft);
+}
+
+void MainWindow::setButtonBh(QWidget *demo)
+{
+    demo->setAttribute(Qt::WA_DeleteOnClose);
+    m_demos.append(demo);  // 对应窗口关闭之后demo自动变为nullptr
+    connect(this, &MainWindow::sigCloseAllDemos, demo, &QWidget::close);
 }
 

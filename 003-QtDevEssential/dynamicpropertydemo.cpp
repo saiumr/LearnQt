@@ -1,9 +1,12 @@
 #include <QVBoxLayout>
 #include <QMessageBox>
-#include "dynamicpropertydialog.h"
+#include <QDialog>
+#include "dynamicpropertydemo.h"
 #include "colorinputdialog.h"
 
-DynamicPropertyDialog::DynamicPropertyDialog(QWidget* parent) : QDialog(parent) {
+DynamicPropertyDemo::DynamicPropertyDemo(QWidget* parent) : QWidget(parent) {
+    // 设置独立窗口标题
+    setWindowTitle("动态属性和对话框");
 
     // 创建中央控件和布局
     QVBoxLayout *layout { new QVBoxLayout {this} };
@@ -59,7 +62,6 @@ DynamicPropertyDialog::DynamicPropertyDialog(QWidget* parent) : QDialog(parent) 
         m_lblColorInfo->setText(str);
     });
 
-    setWindowTitle("Qt Dev Essential");
     resize(600, 700);               // 初始大小
     setMinimumSize(300, 300);       // 最小限制
 
@@ -76,11 +78,11 @@ DynamicPropertyDialog::DynamicPropertyDialog(QWidget* parent) : QDialog(parent) 
     // 添加唤起颜色输入框的按钮
     QPushButton *btnColorDialog = new QPushButton("自定义颜色", this);
     layout->addWidget(btnColorDialog);
-    connect(btnColorDialog, &QPushButton::clicked, this, &DynamicPropertyDialog::onColorInput);
+    connect(btnColorDialog, &QPushButton::clicked, this, &DynamicPropertyDemo::onColorInput);
 
 }
 
-void DynamicPropertyDialog::onColorInput()
+void DynamicPropertyDemo::onColorInput()
 {
     ColorInputDialog dlg(this);
     if (dlg.exec() == QDialog::Accepted) {

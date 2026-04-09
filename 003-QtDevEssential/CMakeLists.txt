@@ -15,8 +15,9 @@ qt_add_executable(003-QtDevEssential
     mainwindow.ui
     colorcircle.h colorcircle.cpp
     colorinputdialog.h colorinputdialog.cpp
-    dynamicpropertydialog.h dynamicpropertydialog.cpp
+    dynamicpropertydemo.h dynamicpropertydemo.cpp
     ${app_icon_resource_windows}
+    labeldemodialog.h labeldemodialog.cpp
 )
 
 target_link_libraries(003-QtDevEssential

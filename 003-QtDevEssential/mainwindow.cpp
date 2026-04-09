@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "dynamicpropertydialog.h"
+#include "dynamicpropertydemo.h"
 #include <QVBoxLayout>
 #include <QMargins>
 #include <QFontMetrics>
@@ -42,14 +42,18 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    for (auto &demo_window : m_demos) {
+        demo_window->close();
+    }
     delete ui;
 }
 
 void MainWindow::openDynamicProperDemo()
 {
-    DynamicPropertyDialog *dlg = new DynamicPropertyDialog(this);
-    dlg->setAttribute(Qt::WA_DeleteOnClose);
-    dlg->show();
+    DynamicPropertyDemo *demo = new DynamicPropertyDemo();
+    demo->setAttribute(Qt::WA_DeleteOnClose);
+    m_demos.append(demo);
+    demo->show();
 }
 
 void MainWindow::openLabelDemo()

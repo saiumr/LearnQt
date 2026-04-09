@@ -1,17 +1,16 @@
-#ifndef DYNAMICPROPERTYDIALOG_H
-#define DYNAMICPROPERTYDIALOG_H
+#ifndef DYNAMICPROPERTYDEMO_H
+#define DYNAMICPROPERTYDEMO_H
 
-#include <QDialog>
 #include <QSlider>
 #include <QLabel>
 #include <QPushButton>
 #include "colorcircle.h"
 
-class DynamicPropertyDialog : public QDialog
+class DynamicPropertyDemo : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DynamicPropertyDialog(QWidget* parent = nullptr);
+    explicit DynamicPropertyDemo(QWidget* parent = nullptr);
 
 private slots:
     void onColorInput();
@@ -23,4 +22,4 @@ private:
     QPushButton    *m_btnShowColor;
 };
 
-#endif // DYNAMICPROPERTYDIALOG_H
+#endif // DYNAMICPROPERTYDEMO_H

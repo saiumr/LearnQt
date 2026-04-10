@@ -25,6 +25,7 @@ public:
 private slots:
     void openDynamicProperDemo();
     void openLabelDemo();
+    void openButtonDemo();
 
 signals:
     void sigCloseAllDemos();  // 广播关闭信号
@@ -33,6 +34,7 @@ private:
     Ui::MainWindow    *ui;
     QPushButton       *m_btnDynamic;
     QPushButton       *m_btnLabel;
+    QPushButton       *m_btnButton;
 
     QList<QPointer<QWidget>> m_demos;
     void closeEvent(QCloseEvent *event) override;

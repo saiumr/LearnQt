@@ -21,6 +21,7 @@ qt_add_executable(003-QtDevEssential
     ${app_icon_resource_windows}
     labeldemo.h labeldemo.cpp
     ${RESOURCES}
+    buttondemo.h buttondemo.cpp
 )
 
 target_link_libraries(003-QtDevEssential

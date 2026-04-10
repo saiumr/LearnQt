@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "dynamicpropertydemo.h"
 #include "labeldemo.h"
+#include "buttondemo.h"
 #include <QVBoxLayout>
 #include <QMargins>
 #include <QFontMetrics>
@@ -20,10 +21,12 @@ MainWindow::MainWindow(QWidget *parent)
     // new 按钮
     m_btnDynamic = new QPushButton(central);
     m_btnLabel = new QPushButton(central);
+    m_btnButton = new QPushButton(central);
 
     // 添加按钮到布局
     addStyleButton(layout, m_btnDynamic, "动态属性和对话框");
     addStyleButton(layout, m_btnLabel, "Label演示");
+    addStyleButton(layout, m_btnButton, "Button家族演示");
 
     // 设置一点内外边距
     layout->setContentsMargins(10, 10, 10, 10);
@@ -34,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     // 连接信号槽
     connect(m_btnDynamic, &QPushButton::clicked, this, &MainWindow::openDynamicProperDemo);
     connect(m_btnLabel, &QPushButton::clicked, this, &MainWindow::openLabelDemo);
+    connect(m_btnButton, &QPushButton::clicked, this, &MainWindow::openButtonDemo);
 
     // 设定窗口属性
     setWindowTitle("Qt Dev Essential");
@@ -57,6 +61,13 @@ void MainWindow::openDynamicProperDemo()
 void MainWindow::openLabelDemo()
 {
     LabelDemo *demo = new LabelDemo();
+    setButtonBh(demo);
+    demo->show();
+}
+
+void MainWindow::openButtonDemo()
+{
+    ButtonDemo *demo = new ButtonDemo();
     setButtonBh(demo);
     demo->show();
 }

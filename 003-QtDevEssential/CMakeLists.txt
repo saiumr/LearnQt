@@ -22,6 +22,7 @@ qt_add_executable(003-QtDevEssential
     labeldemo.h labeldemo.cpp
     ${RESOURCES}
     buttondemo.h buttondemo.cpp
+    lineeditdemo.h lineeditdemo.cpp
 )
 
 target_link_libraries(003-QtDevEssential

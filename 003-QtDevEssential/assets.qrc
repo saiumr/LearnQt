@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>lee_ico.ico</file>
+        <file>sang.gif</file>
     </qresource>
 </RCC>

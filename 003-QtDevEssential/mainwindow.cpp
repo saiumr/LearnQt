@@ -4,6 +4,7 @@
 #include "labeldemo.h"
 #include "buttondemo.h"
 #include "lineeditdemo.h"
+#include "calculatordemo.h"
 #include <QVBoxLayout>
 #include <QMargins>
 #include <QFontMetrics>
@@ -24,12 +25,14 @@ MainWindow::MainWindow(QWidget *parent)
     m_btnLabel = new QPushButton(central);
     m_btnButton = new QPushButton(central);
     m_btnLineEdit = new QPushButton(central);
+    m_btnCalculator = new QPushButton(central);
 
     // 添加按钮到布局
     addStyleButton(layout, m_btnDynamic, "动态属性和对话框");
     addStyleButton(layout, m_btnLabel, "Label演示");
     addStyleButton(layout, m_btnButton, "Button家族演示");
     addStyleButton(layout, m_btnLineEdit, "LineEidt演示");
+    addStyleButton(layout, m_btnCalculator, "计算器");
 
     // 设置一点内外边距
     layout->setContentsMargins(10, 10, 10, 10);
@@ -42,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_btnLabel, &QPushButton::clicked, this, &MainWindow::openLabelDemo);
     connect(m_btnButton, &QPushButton::clicked, this, &MainWindow::openButtonDemo);
     connect(m_btnLineEdit, &QPushButton::clicked, this, &MainWindow::openLineEditDemo);
+    connect(m_btnCalculator, &QPushButton::clicked, this, &MainWindow::openCalculatorDemo);
 
     // 设定窗口属性
     setWindowTitle("Qt Dev Essential");
@@ -54,6 +58,8 @@ MainWindow::~MainWindow()
     qDebug() << "主窗口释放了";
     delete ui;
 }
+
+
 
 void MainWindow::openDynamicProperDemo()
 {
@@ -79,6 +85,13 @@ void MainWindow::openButtonDemo()
 void MainWindow::openLineEditDemo()
 {
     LineEditDemo *demo = new LineEditDemo();
+    setButtonBh(demo);
+    demo->show();
+}
+
+void MainWindow::openCalculatorDemo()
+{
+    CalculatorDemo *demo = new CalculatorDemo();
     setButtonBh(demo);
     demo->show();
 }

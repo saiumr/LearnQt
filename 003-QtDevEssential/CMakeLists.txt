@@ -23,6 +23,8 @@ qt_add_executable(003-QtDevEssential
     ${RESOURCES}
     buttondemo.h buttondemo.cpp
     lineeditdemo.h lineeditdemo.cpp
+    calculatordemo.h calculatordemo.cpp
+    calculatordemo.ui
 )
 
 target_link_libraries(003-QtDevEssential

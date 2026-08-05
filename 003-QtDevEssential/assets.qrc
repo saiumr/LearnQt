@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>lee_ico.ico</file>
         <file>sang.gif</file>
+        <file>icon_backspace.png</file>
     </qresource>
 </RCC>

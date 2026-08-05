@@ -27,6 +27,7 @@ private slots:
     void openLabelDemo();
     void openButtonDemo();
     void openLineEditDemo();
+    void openCalculatorDemo();
 
 signals:
     void sigCloseAllDemos();  // 广播关闭信号
@@ -37,6 +38,7 @@ private:
     QPushButton       *m_btnLabel;
     QPushButton       *m_btnButton;
     QPushButton       *m_btnLineEdit;
+    QPushButton       *m_btnCalculator;
 
     QList<QPointer<QWidget>> m_demos;
     void closeEvent(QCloseEvent *event) override;

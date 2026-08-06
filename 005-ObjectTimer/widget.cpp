@@ -12,8 +12,8 @@ Widget::Widget(QWidget *parent)
 
     picID = 0;
 
-    qDebug() << "pic cave0.jpg exist: " << QFile::exists(":/cave0.jpg");
-    QPixmap pic(":/cave0.jpg");
+    qDebug() << "pic cave0.jpg exist: " << QFile::exists(":/images/cave0.jpg");
+    QPixmap pic(":/images/cave0.jpg");
     if (pic.isNull()) {
         qDebug() << "pic load failed!";
     } else {
@@ -28,8 +28,7 @@ void Widget::timerEvent(QTimerEvent *event)
     if (event->timerId() != my_object_timer_id)
         return;
 
-
-    QString path {":/cave"};
+    QString path {":/images/cave"};
     path += QString::number(picID);
 
     switch (picID) {

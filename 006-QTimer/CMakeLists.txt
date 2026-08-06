@@ -15,6 +15,12 @@ qt_add_executable(006-QTimer
     widget.ui
     ${RES_IMAGES}
     aspectratiolabel.h aspectratiolabel.cpp
+    common.h
+)
+
+target_include_directories(006-QTimer
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(006-QTimer

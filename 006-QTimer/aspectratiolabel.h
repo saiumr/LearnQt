@@ -6,6 +6,7 @@
 #include <QResizeEvent>
 #include <QTimer>
 #include <memory>
+#include "common.h"
 
 class AspectRatioLabel : public QLabel
 {

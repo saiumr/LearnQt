@@ -8,7 +8,7 @@ AspectRatioLabel::AspectRatioLabel(QWidget *parent)
     // label内部图片居中
     setAlignment(Qt::AlignCenter);
 
-    timer_interval = 120;  // ms
+    timer_interval = TIMEOUT_1_MS * 16;
     timer = std::make_unique<QTimer>();
     timer->setInterval(timer_interval);
     timer->setSingleShot(true);  // 单次触发
@@ -54,6 +54,7 @@ void AspectRatioLabel::updateScaledPixmap()
         return;
     }
 
+    //  Qt::KeepAspectRatio 保持图片原比例，把size()参数当成最大边框
     QPixmap scaled = m_originalPix.scaled(
         this->size(),
         Qt::KeepAspectRatio,

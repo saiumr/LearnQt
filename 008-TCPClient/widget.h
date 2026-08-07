@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QTcpSocket>
 #include <QHostAddress>
-#include <memory>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,6 +25,6 @@ private slots:
 
 private:
     Ui::Widget *ui;
-    std::unique_ptr<QTcpSocket> socket;
+    QTcpSocket* socket;
 };
 #endif // WIDGET_H

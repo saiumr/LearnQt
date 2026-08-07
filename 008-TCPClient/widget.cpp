@@ -1,5 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include "chat.h"
 #include <QMessageBox>
 
 Widget::Widget(QWidget *parent)
@@ -10,20 +11,27 @@ Widget::Widget(QWidget *parent)
 
     setWindowTitle("TCP客户端");
 
-    socket = std::make_unique<QTcpSocket>();
+    socket = new QTcpSocket(this);
 
     // 判断连接成功：socket对象会发出信号
-    connect(socket.get(), &QTcpSocket::connected, this, [this]()
+    connect(socket, &QTcpSocket::connected, this, [this]()
     {
         QMessageBox::information(this, "连接提示", "连接成功");
+
+        this->hide();
+        Chat* c { new Chat(socket) };
+        c->show();
     });
 
     // 连接断开：socket对象会发出信号
-    connect(socket.get(), &QTcpSocket::disconnected, this, [this]()
-    {
-        QMessageBox::information(this, "连接提示", "连接异常 网络断开");
-    });
+    // connect(socket, &QTcpSocket::disconnected, this, [this]()
+    // {
+    //     QMessageBox::information(this, "连接提示", "连接异常 网络断开");
+    // });
 
+    // 填充默认值
+    ui->lineEdit_addr->setText("127.0.0.1");
+    ui->lineEdit_port->setText("9527");
 }
 
 Widget::~Widget()

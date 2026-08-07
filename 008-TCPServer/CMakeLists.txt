@@ -11,6 +11,7 @@ qt_add_executable(008-TCPServer
     widget.cpp
     widget.h
     widget.ui
+    mythread.h mythread.cpp
 )
 
 target_link_libraries(008-TCPServer

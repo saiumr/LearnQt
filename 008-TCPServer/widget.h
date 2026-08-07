@@ -24,7 +24,7 @@ public:
 
 private slots:
     void newClientHandler();
-    void clientInfoSlot();
+    // void clientInfoSlot();
 
 private:
     Ui::Widget *ui;

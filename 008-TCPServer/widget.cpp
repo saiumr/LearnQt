@@ -1,5 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include "mythread.h"
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -34,12 +35,17 @@ void Widget::newClientHandler()
     ui->lineEdit_clnt_port->setText(clnt_port);
 
     // 收到客户端发出的消息，socket发出ReadyRead信号
-    connect(socket, &QTcpSocket::readyRead, this, &Widget::clientInfoSlot);
+    // connect(socket, &QTcpSocket::readyRead, this, &Widget::clientInfoSlot);
+
+    // 启动线程 - 继承Qt的线程类
+    MyThread* t { new MyThread(socket) };
+    t->start();   // 开始线程
+
 }
 
-void Widget::clientInfoSlot()
-{
-    // 获取信号的发出者
-    QTcpSocket* s { (QTcpSocket*)sender() };
-    ui->mainLineEdit->setText(QString(s->readAll()));
-}
+// void Widget::clientInfoSlot()
+// {
+//     // 获取信号的发出者
+//     QTcpSocket* s { (QTcpSocket*)sender() };
+//     ui->mainLineEdit->setText(QString(s->readAll()));
+// }

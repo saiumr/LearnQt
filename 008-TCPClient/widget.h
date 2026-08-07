@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTcpSocket>
+#include <QHostAddress>
 #include <memory>
 
 QT_BEGIN_NAMESPACE

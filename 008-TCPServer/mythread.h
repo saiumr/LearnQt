@@ -15,6 +15,7 @@ protected:
     void run() override;
 
 signals:
+    void sendToWidget(QByteArray b);    // 自定义信号
 
 private slots:
     void clntInfoSlot();

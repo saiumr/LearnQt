@@ -10,5 +10,7 @@ void MyThread::run()
 
 void MyThread::clntInfoSlot()
 {
-    qDebug() << socket->readAll();
+    // qDebug() << socket->readAll();
+    QByteArray ba { socket->readAll() };
+    emit sendToWidget(ba);    // 发送信号
 }

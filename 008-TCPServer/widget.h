@@ -25,6 +25,7 @@ public:
 private slots:
     void newClientHandler();
     // void clientInfoSlot();
+    void threadSlot(QByteArray ba);
 
 private:
     Ui::Widget *ui;

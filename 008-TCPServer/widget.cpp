@@ -41,6 +41,13 @@ void Widget::newClientHandler()
     MyThread* t { new MyThread(socket) };
     t->start();   // 开始线程
 
+    // 连接自定义信号
+    connect(t, &MyThread::sendToWidget, this, &Widget::threadSlot);
+}
+
+void Widget::threadSlot(QByteArray ba)
+{
+    ui->mainLineEdit->setText(ba);
 }
 
 // void Widget::clientInfoSlot()

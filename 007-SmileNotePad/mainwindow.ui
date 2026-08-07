@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>416</width>
-    <height>280</height>
+    <width>558</width>
+    <height>386</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,15 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTextEdit" name="textEdit"/>
+     <widget class="QTextEdit" name="textEdit">
+      <property name="font">
+       <font>
+        <family>Maple Mono NF CN</family>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+       </font>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -25,7 +33,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>416</width>
+     <width>558</width>
      <height>17</height>
     </rect>
    </property>
@@ -33,9 +41,10 @@
     <property name="title">
      <string>文件(&amp;F)</string>
     </property>
-    <addaction name="action_N"/>
-    <addaction name="action_O"/>
-    <addaction name="action_S"/>
+    <addaction name="newAction"/>
+    <addaction name="openAction"/>
+    <addaction name="quickSaveAction"/>
+    <addaction name="saveAction"/>
    </widget>
    <widget class="QMenu" name="menu_B">
     <property name="title">
@@ -52,19 +61,24 @@
    <addaction name="menu_C"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action_N">
+  <action name="newAction">
    <property name="text">
     <string>新建(&amp;N)</string>
    </property>
   </action>
-  <action name="action_O">
+  <action name="openAction">
    <property name="text">
     <string>打开(&amp;O)</string>
    </property>
   </action>
-  <action name="action_S">
+  <action name="saveAction">
    <property name="text">
-    <string>另存为(&amp;S)</string>
+    <string>另存为(&amp;SA)</string>
+   </property>
+  </action>
+  <action name="quickSaveAction">
+   <property name="text">
+    <string>保存(&amp;S)</string>
    </property>
   </action>
  </widget>

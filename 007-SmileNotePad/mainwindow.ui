@@ -24,6 +24,12 @@
         <italic>false</italic>
        </font>
       </property>
+      <property name="tabChangesFocus">
+       <bool>false</bool>
+      </property>
+      <property name="tabStopDistance">
+       <double>40.000000000000000</double>
+      </property>
      </widget>
     </item>
    </layout>

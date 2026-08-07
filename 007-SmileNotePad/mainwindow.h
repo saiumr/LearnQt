@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QFile>
+#include <QKeyEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,6 +26,9 @@ private slots:
     void openActionSlot();
     void quickSaveActionSlot();
     void saveActionSlot();
+
+protected:
+    void keyPressEvent(QKeyEvent* k) override;
 
 private:
     Ui::MainWindow *ui;

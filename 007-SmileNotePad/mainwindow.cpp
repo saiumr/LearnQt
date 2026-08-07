@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -68,6 +69,7 @@ void MainWindow::openActionSlot()
     ui->textEdit->setText(QString(ba));
 
     file.close();
+    m_newFile = false;
 }
 
 void MainWindow::quickSaveActionSlot()
@@ -127,6 +129,13 @@ void MainWindow::saveActionSlot()
     if (m_newFile) {
         this->setWindowTitle(m_WindowTitle + "（" + fileName + "）");
         m_newFile = false;
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *k)
+{
+    if (k->modifiers() == Qt::ControlModifier && k->key() == Qt::Key_S) {
+        quickSaveActionSlot();
     }
 }
 

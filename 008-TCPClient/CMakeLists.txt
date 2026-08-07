@@ -11,6 +11,7 @@ qt_add_executable(008-TCPClient
     widget.cpp
     widget.h
     widget.ui
+    chat.h chat.cpp chat.ui
 )
 
 target_link_libraries(008-TCPClient

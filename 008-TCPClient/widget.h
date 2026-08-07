@@ -2,6 +2,8 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QTcpSocket>
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,8 +21,10 @@ public:
 
 private slots:
     void on_cancel_btn_clicked();
+    void on_connect_btn_clicked();
 
 private:
     Ui::Widget *ui;
+    std::unique_ptr<QTcpSocket> socket;
 };
 #endif // WIDGET_H
